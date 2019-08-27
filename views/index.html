@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/static/web/css/common.css">
-    <script src="/static/web/js/jquery.min.js"></script>
-    <script src="/static/web/js/vue.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="/static/web/editormd/lib/jquery.min.js"></script>
     <title>登陆</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="index">
-        <h1>登录</h1>
-        <form>
-            <p>Name: <input name="name" value='' v-model='name'></p>
-            <p>Password: <input name="password" type="password" value='' v-model='password'></p>
-            <p><input type="button" value="Submit" @click="submit"></p>
-        </form>
-        <p>没有账号？<a href="./register.html">去注册</a></p>
+      <h1>登录</h1>
+      <form>
+        <p>Name: <input name="name" value="" v-model="name" /></p>
+        <p>
+          Password:
+          <input name="password" type="password" value="" v-model="password" />
+        </p>
+        <p><input type="button" value="Submit" @click="submit" /></p>
+      </form>
+      <p>没有账号？<a href="./register.html">去注册</a></p>
     </div>
     <script>
-        $(function () {
-            var vm = new Vue({
-                el: '#index',
-                data: {
-                    name: '',
-                    password: '',
-                },
-                methods: {
-                    submit () {
-                        var that = this;
-                        // AJAX提交JSON:
-                        var para = {
-                            name: that.name,
-                            password: that.password
-                        }
-                        $.ajax({
-                            type: 'POST',
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            url: '/api/login/',
-                            data: JSON.stringify(para)
-                        }).done(function (r) {
-                            console.log(r);
-                        }).fail(function (jqXHR, textStatus) {
-                            // Not 200:
-                            alert('Error: ' + jqXHR.responseJSON.message);
-                        });
-                    }
-                }
-            })
+      $(function() {
+        var vm = new Vue({
+          el: '#index',
+          data: {
+            name: '',
+            password: ''
+          },
+          methods: {
+            submit() {
+              var that = this
+              // AJAX提交JSON:
+              var para = {
+                name: that.name,
+                password: that.password
+              }
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                url: '/api/login/',
+                data: JSON.stringify(para)
+              })
+                .done(function(r) {
+                  console.log(r)
+                })
+                .fail(function(jqXHR, textStatus) {
+                  // Not 200:
+                  alert('Error: ' + jqXHR.responseJSON.message)
+                })
+            }
+          }
         })
+      })
     </script>
-</body>
+  </body>
 </html>
