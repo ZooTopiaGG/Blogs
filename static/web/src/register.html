@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <title>注册</title>
+</head>
+<body>
+    <div id="register">
+        <h1>注册</h1>
+        <form>
+            <p>Name: <input name="name" value="" v-model='name'></p>
+            <p>Password: <input name="password" type="password" v-model='password'></p>
+            <p>ConfirmPassword: <input name="password1" type="password" v-model='password1'></p>
+            <p>Email: <input type="email" name="email" id="email" v-model='email'></p>
+            <p>Gender: <input type="text" name="gender" v-model='gender'></p>
+            <p><input type="button" value="Submit" @click='submit'></p>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            var vm = new Vue({
+                el: '#register',
+                data: {
+                    name: '',
+                    password: '',
+                    password1: '',
+                    email: '',
+                    gender: ''
+                },
+                methods: {
+                    submit () {
+                        var that = this;
+                        // AJAX提交JSON:
+                        var para = {
+                            name: that.name,
+                            password: that.password,
+                            password1: that.password1,
+                            email: that.email,
+                            gender: that.gender
+                        }
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            url: '/api/signup/',
+                            data: JSON.stringify(para)
+                        }).done(function (r) {
+                            console.log(r);
+                            alert(r.message)
+                            location.href = './index.html'
+                        }).fail(function (jqXHR, textStatus) {
+                            // Not 200:
+                            alert('Error: ' + jqXHR.responseJSON.message);
+                        });
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+</html>

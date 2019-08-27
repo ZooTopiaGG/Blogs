@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/static/web/editormd/css/editormd.min.css" />
+    <script src="/static/web/editormd/lib/jquery.min.js"></script>
+    <script src="/static/web/editormd/editormd.min.js"></script>
+    <script src="/static/web/js/common.js"></script>
+    <title>markdown</title>
+  </head>
+  <body>
+    <div style="width:90%;margin:0 auto;">
+      <input
+        id="title"
+        style="width:100%;height:40px;border:0;padding:5px 10px 5px 50px;outline:none;font-size:18px;color:#000;"
+        type="text"
+        name="title"
+        placeholder="无标题文章"
+      />
+    </div>
+    <div style="width:90%;margin:0 auto;">
+      <input
+        id="desc"
+        style="width:100%;height:40px;border:0;padding:5px 10px 5px 50px;outline:none;font-size:18px;color:#000;"
+        type="text"
+        name="desc"
+        placeholder="简要描述该文章"
+      />
+    </div>
+    <div id="my-editormd">
+      <textarea
+        id="my-editormd-markdown-doc"
+        name="my-editormd-markdown-doc"
+        style="display:none;"
+      ></textarea>
+      <!-- 注意：name属性的值-->
+      <textarea
+        id="my-editormd-html-code"
+        name="my-editormd-html-code"
+        style="display:none;"
+      ></textarea>
+    </div>
+
+    <div style="width:90%;margin:0 auto;">
+      <div>
+        <select name="type" id="type">
+          <option value="0">原创</option>
+          <option value="1">转载</option>
+        </select>
+      </div>
+      <button
+        id="btn"
+        style="width:120px;height:40px;line-height:40px;background:#409EFF;border:0;color:#fff;border-radius:4px;margin-top:15px;"
+      >
+        提交
+      </button>
+    </div>
+    <script>
+      var testEditor
+      $(function() {
+        testEditor = editormd('my-editormd', {
+          //注意1：这里的就是上面的DIV的id属性值
+          width: '90%',
+          height: 640,
+          syncScrolling: 'single',
+          path: '/static/web/editormd/lib/', //注意2：你的路径
+          saveHTMLToTextarea: true, //注意3：这个配置，方便post提交表单
+          htmlDecode: 'style,script,iframe|on*', // 开启 HTML 标签解析，为了安全性，默认不开启
+
+          /**上传图片相关配置如下*/
+          imageUpload: true,
+          imageFormats: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
+          imageUploadURL: '/static/web/' //注意你后端的上传图片服务地址
+        })
+
+        $('#btn').on('click', function() {
+          // let articleid = getParam('articleid')
+          // console.log(testEditor.getHTML())
+          // console.log($('.editormd-preview-container').html())
+          let title = $('#title').val()
+          let encode = testEditor.getHTML()
+          // let encode = encodeURIComponent(testEditor.getHTML())
+          let desc = $('#desc').val()
+          let type = $('#type').val()
+          var para = {
+            articleid: '28430a85-57fe-40f0-ac9b-432892ae520c',
+            type: type, // 类型 0：原创 / 1： 转载
+            desc: desc, // 描述信息
+            title: title, // 标题
+            content: encode // 這个参数 是服务端 取得那个参数
+          }
+          $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/api/updateArticle',
+            data: JSON.stringify(para)
+          })
+            .done(function(r) {
+              console.log(r)
+              alert(r.message)
+            })
+            .fail(function(jqXHR, textStatus) {
+              // Not 200:
+              console.log(jqXHR)
+              alert('Error: ' + textStatus)
+            })
+        })
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="/static/web/editormd/lib/jquery.min.js"></script>
+    <script src="/static/web/js/common.js"></script>
+    <title>markdown</title>
+  </head>
+  <body>
+    <div>
+      <form action="/api/todynamic" method="POST">
+        <input type="submit" id="addDy" value="添加动态" />
+      </form>
+      <form action="/api/toaddarticle" method="POST">
+        <input type="submit" id="addDy" value="添加文章" />
+      </form>
+      <form action="/api/toaddaudio" method="POST">
+        <input type="submit" id="addDy" value="添加音乐" />
+      </form>
+    </div>
+    <ul id="art-list">
+      <!-- <li style="padding:20px; border-bottom:1px solid #ddd; display:flex;" >
+            <div style="flex:1">
+                <div id="title">aaaaaaaaaaaaaaaaa</div>
+                <div id="type">文章</div>
+            </div>
+            <div style="margin:0 20px">
+                <p><input type="button" id="update" idx="" value="修改"></p>
+            </div>
+            <div style="clear:both;"></div>
+        </li> -->
+    </ul>
+
+    <script>
+      $(function() {
+        var para = {
+          page: 1,
+          size: 100,
+          columntype: -1
+        }
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          contentType: 'application/json',
+          url: '/api/getArticle',
+          data: JSON.stringify(para)
+        })
+          .done(function(res) {
+            let r = res.result
+            var li = ''
+            for (var i = 0; i < r.length; i++) {
+              if (r[i].columntype == '0') {
+                var columnname = '文章'
+              } else {
+                var columnname = '技术'
+              }
+              li += `<li style="padding:20px; border-bottom:1px solid #ddd; display:flex;" >
+                        <div style="flex:1">
+                            <div id="title">${r[i].title}</div>
+                            <div id="type">${columnname}</div>
+                        </div>
+                        <div style="margin:0 20px">
+                           <form method="POST" action="/api/toupdate">
+                                <input type="text" name="articleid" style="display:none;" value="${r[i].id}">
+                                <p><input type="submit" id="update" idx="${r[i].id}" value="修改"></p>
+                            </form>
+
+                        </div>
+                        <div style="clear:both;"></div>
+                    </li>`
+            }
+            $('#art-list').append(li)
+          })
+          .fail(function(jqXHR, textStatus) {
+            // Not 200:
+            alert('Error: ' + jqXHR.responseJSON.message)
+          })
+      })
+    </script>
+  </body>
+</html>

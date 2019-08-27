@@ -1,0 +1,10 @@
+{
+  "accessKey": "mcya7L-djsN7KuiF2QanzuTbreUvjXmmP6dZOAge",
+  "secretKey": "DDeGtbiYmuVjnxacSiwMpQO3cluSyxnckXFs49Pn",
+  "bucket": "55lover-wallpaper",
+  "bucket2": "55lover-videos",
+  "port": 8088,
+  "uptokenUrl": "/api/upload",
+  "domain": "http://wallpaper.55lover.com/",
+  "domain2": "http://videos.55lover.com/"
+}

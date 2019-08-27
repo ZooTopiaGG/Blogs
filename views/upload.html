@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>上传</title>
+</head>
+<body>
+  <input id="btn1" type="file" name="file"/> 
+ <input id="btn2" type="submit" value="提交"/>
+</body>
+<script>
+   
+  var btn1 = document.querySelector('#btn1')
+  var btn2 = document.querySelector('#btn2')
+  var file = null
+  btn1.addEventListener('change', function(e){
+    file = e.target.files[0]
+  })
+ 
+  btn2.onclick = function(){
+  var _data = new FormData();
+  _data.append('file', file);
+  xhr(_data)
+  }
+ 
+  var xhr = function(formdata){
+    var xmlHttp = new XMLHttpRequest(); 
+ 
+    xmlHttp.open("post","/api/upload", true); 
+      
+    xmlHttp.send(formdata);
+ 
+    xmlHttp.onreadystatechange = function(){ 
+     if(xmlHttp.readyState==4){ 
+       if(xmlHttp.status==200){ 
+         var data = xmlHttp.responseText; 
+         console.log(JSON.parse(data));
+       } 
+     }
+    }
+  }
+</script>
+</html>
