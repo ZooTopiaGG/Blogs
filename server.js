@@ -43,11 +43,11 @@ app.use(
 )
 
 //2 类似 绑定 静态资源文件  css  js 等
-if (!isProduction) {
-  let staticFiles = require('./static.js')
-  app.use(staticFiles('/static/web/', __dirname + '/static/web'))
-  app.use(staticFiles('/static/', __dirname + '/static'))
-}
+// if (!isProduction) {
+let staticFiles = require('./static.js')
+app.use(staticFiles('/static/web/', __dirname + '/static/web'))
+app.use(staticFiles('/static/', __dirname + '/static'))
+// }
 
 // 上传图片
 app.use(upload.uploadImg()) // app.use(Function) 接收function

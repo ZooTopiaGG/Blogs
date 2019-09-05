@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "SET NODE_ENV=test&&node --use_strict server.js",
+    "dev": "SET NODE_ENV=test&&node --use_strict server.js",
     "start": "export NODE_ENV=production&&node --use_strict server.js"
   },
   "name": "55lover-blog",
