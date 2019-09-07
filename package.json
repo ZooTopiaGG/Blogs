@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "SET NODE_ENV=test&&node --use_strict server.js",
-    "start": "export NODE_ENV=production&&node --use_strict server.js"
+    "start": "export NODE_ENV=production&&node --use_strict server.js",
+    "pm2": "pm2 start pm2.config.json"
   },
   "name": "55lover-blog",
   "version": "3.0.1",
