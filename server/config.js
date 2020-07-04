@@ -7,6 +7,7 @@ const testConfig = './config-test.js'
 const fs = require('fs')
 
 var config = null
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'test') {
   console.log(`Load ${testConfig}...`)
   config = require(testConfig)
