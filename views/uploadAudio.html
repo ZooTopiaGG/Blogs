@@ -20,32 +20,32 @@
     </div>
   </body>
   <script>
-    $(function() {
+    $(function () {
       function trim(str) {
-        return str.replace(/(^\s*)|(\s*$)/g, '')
+        return str.replace(/(^\s*)|(\s*$)/g, "");
       }
       // 上传图片
-      var btn1 = document.querySelector('#btn1'),
-        btn2 = document.querySelector('#btn2'),
-        btn3 = document.querySelector('#btn3'),
+      var btn1 = document.querySelector("#btn1"),
+        btn2 = document.querySelector("#btn2"),
+        btn3 = document.querySelector("#btn3"),
         file = null,
-        url = '',
-        song = ''
-      btn1.addEventListener('change', function(e) {
-        file = e.target.files[0]
-        var strRegex = '(.mp3|.mp4|.wvm|.flac|.ncm)$' //用于验证音频扩展名的正则表达式
-        var re = new RegExp(strRegex)
+        url = "",
+        song = "";
+      btn1.addEventListener("change", function (e) {
+        file = e.target.files[0];
+        var strRegex = "(.mp3|.mp4|.wvm|.flac|.ncm|.m4a)$"; //用于验证音频扩展名的正则表达式
+        var re = new RegExp(strRegex);
         if (file.name) {
           if (re.test(file.name)) {
-            song = trim(file.name.split(/.mp3|.mp4|.flac|.ncm/)[0])
+            song = trim(file.name.split(/.mp3|.mp4|.flac|.ncm/)[0]);
           } else {
-            alert('上传文件格式不对，仅支持.mp3,.mp4格式')
-            return
+            alert("上传文件格式不对，仅支持.mp3,.mp4格式");
+            return;
           }
         } else {
-          return
+          return;
         }
-        console.log(song)
+        console.log(song);
         //  try {
         //   var fileGroup = file.name.split('-')
         //   if (fileGroup.length == 1) {
@@ -61,113 +61,113 @@
         // //  }
         //  console.log(songname)
         //  console.log(singername)
-        let fr = new FileReader()
-        fr.onloadend = function(e) {
-          document.getElementById('img').src = e.target.result
-        }
-        fr.readAsDataURL(file)
-      })
+        let fr = new FileReader();
+        fr.onloadend = function (e) {
+          document.getElementById("img").src = e.target.result;
+        };
+        fr.readAsDataURL(file);
+      });
 
-      btn2.onclick = function() {
-        var _data = new FormData()
-        _data.append('file', file)
-        console.log(file)
-        xhr(_data)
-      }
+      btn2.onclick = function () {
+        var _data = new FormData();
+        _data.append("file", file);
+        console.log(file);
+        xhr(_data);
+      };
 
-      var xhr = function(formdata) {
-        var xmlHttp = new XMLHttpRequest()
+      var xhr = function (formdata) {
+        var xmlHttp = new XMLHttpRequest();
 
-        xmlHttp.open('post', '/api/uploadAudio', true)
+        xmlHttp.open("post", "/api/uploadAudio", true);
 
-        xmlHttp.send(formdata)
+        xmlHttp.send(formdata);
 
-        xmlHttp.onreadystatechange = function() {
+        xmlHttp.onreadystatechange = function () {
           if (xmlHttp.readyState == 4) {
             if (xmlHttp.status == 200) {
-              var data = xmlHttp.responseText
-              let urlJson = JSON.parse(data)
-              console.log(data)
-              url = urlJson.imgUrl
-              alert('上传成功，请提交数据！')
-              $('#img').attr('src', urlJson.imgUrl)
+              var data = xmlHttp.responseText;
+              let urlJson = JSON.parse(data);
+              console.log(data);
+              url = urlJson.imgUrl;
+              alert("上传成功，请提交数据！");
+              $("#img").attr("src", urlJson.imgUrl);
               // document.getElementById("img").src = url;
             }
           }
-        }
-      }
+        };
+      };
       //  查询audio
       function getAudioList() {
         var para = {
           size: 100,
-          page: 1
-        }
+          page: 1,
+        };
         $.ajax({
-          type: 'POST',
-          dataType: 'json',
-          contentType: 'application/json',
-          url: '/api/getAudioList',
-          data: JSON.stringify(para)
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          url: "/api/getAudioList",
+          data: JSON.stringify(para),
         })
-          .done(function(r) {
-            console.log(r)
-            var $li = ''
+          .done(function (r) {
+            console.log(r);
+            var $li = "";
             for (var i = 0; i < r.result.length; i++) {
               $li += `<li>
                   <span>${r.result[i].songname}</span>-<span>${r.result[i].singername}</span>
                   <audio src="${r.result[i].url}" id='img' controls></audio>
-              </li>`
+              </li>`;
             }
-            $('#audiolist').html($li)
-            alert(r.message)
+            $("#audiolist").html($li);
+            alert(r.message);
           })
-          .fail(function(jqXHR, textStatus) {
+          .fail(function (jqXHR, textStatus) {
             // Not 200:
-            alert('Error: ' + jqXHR.responseJSON.message)
-          })
+            alert("Error: " + jqXHR.responseJSON.message);
+          });
       }
-      getAudioList()
+      getAudioList();
       //  添加音乐
-      $('#btn3').on('click', function() {
+      $("#btn3").on("click", function () {
         if (!song) {
-          alert('song参数为空，请先选择图片')
-          return
+          alert("song参数为空，请先选择图片");
+          return;
         }
         if (!url) {
-          alert('url参数为空，请先上传图片')
-          return
+          alert("url参数为空，请先上传图片");
+          return;
         }
-        var singername = '未知',
-          songname = '未知'
+        var singername = "未知",
+          songname = "未知";
         try {
-          singername = song.split('-')[1]
-          songname = song.split('-')[0]
+          singername = song.split("-")[1];
+          songname = song.split("-")[0];
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
         // AJAX提交JSON:
         var para = {
           url,
           singername,
-          songname
-        }
+          songname,
+        };
         $.ajax({
-          type: 'POST',
-          dataType: 'json',
-          contentType: 'application/json',
-          url: '/api/addAudio',
-          data: JSON.stringify(para)
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          url: "/api/addAudio",
+          data: JSON.stringify(para),
         })
-          .done(function(r) {
-            console.log(r)
-            getAudioList()
-            alert(r.message)
+          .done(function (r) {
+            console.log(r);
+            getAudioList();
+            alert(r.message);
           })
-          .fail(function(jqXHR, textStatus) {
+          .fail(function (jqXHR, textStatus) {
             // Not 200:
-            alert('Error: ' + jqXHR.responseJSON.message)
-          })
-      })
-    })
+            alert("Error: " + jqXHR.responseJSON.message);
+          });
+      });
+    });
   </script>
 </html>

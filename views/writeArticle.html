@@ -5,33 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="/static/web/editormd/css/editormd.min.css" />
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
     <script src="/static/web/editormd/lib/jquery.min.js"></script>
     <script src="/static/web/editormd/editormd.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <title>markdown</title>
   </head>
   <body>
-    <div id="articleid" style="display:none">{{ articleid }}</div>
+    <div id="articleid" style="display: none">{{ articleid }}</div>
     <!-- // nunjucks肯定可以直接获取到值 并传入js中 -->
-    <div style="width:90%;margin:0 auto 20px;">
+    <div style="width: 90%; margin: 0 auto 20px">
       <input
         id="title"
-        style="width:100%;height:40px;border:0;padding:5px 10px 5px 50px;outline:none;font-size:18px;color:#000;"
+        style="
+          width: 100%;
+          height: 40px;
+          border: 0;
+          padding: 5px 10px 5px 50px;
+          outline: none;
+          font-size: 18px;
+          color: #000;
+        "
         type="text"
         name="title"
         placeholder="无标题文章"
       />
     </div>
-    <div style="width:90%;margin:0 auto 20px;">
+    <div style="width: 90%; margin: 0 auto 20px">
       <input
         id="desc"
-        style="width:100%;height:40px;border:0;padding:5px 10px 5px 50px;outline:none;font-size:18px;color:#000;"
+        style="
+          width: 100%;
+          height: 40px;
+          border: 0;
+          padding: 5px 10px 5px 50px;
+          outline: none;
+          font-size: 18px;
+          color: #000;
+        "
         type="text"
         name="desc"
         placeholder="简要描述该文章"
       />
     </div>
-    <div style="width:90%;margin:0 auto 20px;">
-      <div style="position:relative;">
+    <div style="width: 90%; margin: 0 auto 20px">
+      <div style="position: relative">
         <img
           width="200"
           height="120"
@@ -40,18 +61,36 @@
           alt="dengpeng"
         />
         <input
-          style="width:200px; height:120px; position:absolute; top:0;left:0;z-index:9; opacity:0"
+          style="
+            width: 200px;
+            height: 120px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9;
+            opacity: 0;
+          "
           id="btn1"
           type="file"
           name="file"
         />
         <input
-          style="width:120px;height:40px;line-height:40px;background:#409EFF;border:0;color:#fff;border-radius:4px;vertical-align: 14px;margin-left: 20px;"
+          style="
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background: #409eff;
+            border: 0;
+            color: #fff;
+            border-radius: 4px;
+            vertical-align: 14px;
+            margin-left: 20px;
+          "
           id="btn2"
           type="submit"
           value="上传"
         />
-        <span style="color:#999;font-size:14px;margin-left:20px;"
+        <span style="color: #999; font-size: 14px; margin-left: 20px"
           >上传200*120的缩略图</span
         >
       </div>
@@ -60,19 +99,19 @@
       <textarea
         id="my-editormd-markdown-doc"
         name="my-editormd-markdown-doc"
-        style="display:none;"
+        style="display: none"
       ></textarea>
       <!-- 注意：name属性的值-->
       <textarea
         id="my-editormd-html-code"
         name="my-editormd-html-code"
-        style="display:none;"
+        style="display: none"
       ></textarea>
     </div>
 
-    <div style="width:90%;margin:0 auto 20px;">
+    <div style="width: 90%; margin: 0 auto 20px">
       <div>
-        <select name="columntype" id="columntype" style="margin-right:20px;">
+        <select name="columntype" id="columntype" style="margin-right: 20px">
           <option value="0">文章</option>
           <option value="1">技术</option>
         </select>
@@ -83,199 +122,224 @@
       </div>
       <button
         id="btn"
-        style="margin-right:20px;width:120px;height:40px;line-height:40px;background:#409EFF;border:0;color:#fff;border-radius:4px;margin-top:15px;margin-bottom:20px"
+        style="
+          margin-right: 20px;
+          width: 120px;
+          height: 40px;
+          line-height: 40px;
+          background: #409eff;
+          border: 0;
+          color: #fff;
+          border-radius: 4px;
+          margin-top: 15px;
+          margin-bottom: 20px;
+        "
       >
         提交
       </button>
       <button
         id="btn3"
-        style="width:120px;height:40px;line-height:40px;background:#409EFF;border:0;color:#fff;border-radius:4px;margin-top:15px;"
+        style="
+          width: 120px;
+          height: 40px;
+          line-height: 40px;
+          background: #409eff;
+          border: 0;
+          color: #fff;
+          border-radius: 4px;
+          margin-top: 15px;
+        "
       >
         修改
       </button>
     </div>
+    <div id="editor-quill"></div>
     <script>
-      var testEditor
-      $(function() {
+      var testEditor;
+      $(function () {
+        var quill = new Quill("#editor-quill", {
+          theme: "snow",
+          height: 400,
+        });
         // 上传图片
-        var btn1 = document.querySelector('#btn1')
-        var btn2 = document.querySelector('#btn2')
-        var file = null
-        var url
-        btn1.addEventListener('change', function(e) {
-          file = e.target.files[0]
-          let fr = new FileReader()
-          fr.onloadend = function(e) {
-            document.getElementById('img').src = e.target.result
-          }
-          fr.readAsDataURL(file)
-        })
+        var btn1 = document.querySelector("#btn1");
+        var btn2 = document.querySelector("#btn2");
+        var file = null;
+        var url;
+        btn1.addEventListener("change", function (e) {
+          file = e.target.files[0];
+          let fr = new FileReader();
+          fr.onloadend = function (e) {
+            document.getElementById("img").src = e.target.result;
+          };
+          fr.readAsDataURL(file);
+        });
 
-        btn2.onclick = function() {
-          var _data = new FormData()
-          _data.append('file', file)
-          xhr(_data)
-        }
+        btn2.onclick = function () {
+          var _data = new FormData();
+          _data.append("file", file);
+          xhr(_data);
+        };
 
-        var xhr = function(formdata) {
-          var xmlHttp = new XMLHttpRequest()
+        var xhr = function (formdata) {
+          var xmlHttp = new XMLHttpRequest();
 
-          xmlHttp.open('post', '/api/upload', true)
+          xmlHttp.open("post", "/api/upload", true);
 
-          xmlHttp.send(formdata)
+          xmlHttp.send(formdata);
 
-          xmlHttp.onreadystatechange = function() {
+          xmlHttp.onreadystatechange = function () {
             if (xmlHttp.readyState == 4) {
               if (xmlHttp.status == 200) {
-                var data = xmlHttp.responseText
-                let urlJson = JSON.parse(data)
-                url = urlJson.imgUrl
-                alert('上传成功')
-                $('#img').attr('src', urlJson.imgUrl)
+                var data = xmlHttp.responseText;
+                let urlJson = JSON.parse(data);
+                url = urlJson.imgUrl;
+                alert("上传成功");
+                $("#img").attr("src", urlJson.imgUrl);
                 // document.getElementById("img").src = url;
               }
             }
-          }
-        }
+          };
+        };
         // 获取编辑器
-        testEditor = editormd('my-editormd', {
+        testEditor = editormd("my-editormd", {
           //注意1：这里的就是上面的DIV的id属性值
-          width: '90%',
+          width: "90%",
           height: 640,
-          syncScrolling: 'single',
-          path: '/static/web/editormd/lib/', //注意2：你的路径
+          syncScrolling: "single",
+          path: "/static/web/editormd/lib/", //注意2：你的路径
           saveHTMLToTextarea: true, //注意3：这个配置，方便post提交表单
           htmlDecode: true,
-          htmlDecode: 'style,script,iframe|on*', // 开启 HTML 标签解析，为了安全性，默认不开启
+          htmlDecode: "style,script,iframe|on*", // 开启 HTML 标签解析，为了安全性，默认不开启
 
           /**上传图片相关配置如下*/
           imageUpload: true,
-          imageFormats: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
-          imageUploadURL: '/static/' //注意你后端的上传图片服务地址
-        })
+          imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+          imageUploadURL: "/static/", //注意你后端的上传图片服务地址
+        });
         // 添加文章
-        $('#btn').on('click', function() {
-          let title = $('#title').val()
-          let encode = testEditor.getMarkdown()
-          let desc = $('#desc').val()
-          let type = $('#type').val()
-          let columntype = $('#columntype').val()
-          let smallimg = url || $('#img').attr('src')
+        $("#btn").on("click", function () {
+          let title = $("#title").val();
+          let encode = testEditor.getMarkdown();
+          let desc = $("#desc").val();
+          let type = $("#type").val();
+          let columntype = $("#columntype").val();
+          let smallimg = url || $("#img").attr("src");
           var para = {
             type: type, // 类型 0：原创 / 1： 转载
             desc: desc, // 描述信息
             smallimg: smallimg, // 缩略图
             columntype: columntype, // 栏目类型
             title: title, // 标题
-            content: encode // 這个参数 是服务端 取得那个参数
-          }
+            content: encode, // 這个参数 是服务端 取得那个参数
+          };
           $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            url: '/api/writeArticle',
-            data: JSON.stringify(para)
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: "/api/writeArticle",
+            data: JSON.stringify(para),
           })
-            .done(function(r) {
-              console.log(r)
-              alert(r.message)
+            .done(function (r) {
+              console.log(r);
+              alert(r.message);
               // window.history.go(-1)
             })
-            .fail(function(jqXHR, textStatus) {
+            .fail(function (jqXHR, textStatus) {
               // Not 200:
-              alert('Error: ' + jqXHR.responseJSON.message)
-            })
-        })
+              alert("Error: " + jqXHR.responseJSON.message);
+            });
+        });
         // 获取文章信息 通过id
-        if ($('#articleid').text()) {
-          let articleid = $('#articleid').text() // 内容id 查询并装填
+        if ($("#articleid").text()) {
+          let articleid = $("#articleid").text(); // 内容id 查询并装填
           $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            contentType: 'application/json',
-            url: '/api/getArticle/' + articleid
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            url: "/api/getArticle/" + articleid,
           })
-            .done(function(r) {
-              $('#title').val(r.result.title)
-              $('#desc').val(r.result.desc)
-              $('#img').attr('src', r.result.smallimg)
-              $('#columntype').val(r.result.columntype)
-              $('#type').val(r.result.type)
+            .done(function (r) {
+              $("#title").val(r.result.title);
+              $("#desc").val(r.result.desc);
+              $("#img").attr("src", r.result.smallimg);
+              $("#columntype").val(r.result.columntype);
+              $("#type").val(r.result.type);
               // 默认插入内容到markdown
               new Promise((resolve, reject) => {
-                if ($('#my-editormd-markdown-doc')) {
-                  resolve(r.result.content)
+                if ($("#my-editormd-markdown-doc")) {
+                  resolve(r.result.content);
                 } else {
-                  reject('not have')
+                  reject("not have");
                 }
               })
-                .then(res => {
-                  testEditor = editormd('my-editormd', {
+                .then((res) => {
+                  testEditor = editormd("my-editormd", {
                     //注意1：这里的就是上面的DIV的id属性值
-                    width: '90%',
+                    width: "90%",
                     height: 640,
-                    syncScrolling: 'single',
-                    path: '/static/web/editormd/lib/', //注意2：你的路径
+                    syncScrolling: "single",
+                    path: "/static/web/editormd/lib/", //注意2：你的路径
                     saveHTMLToTextarea: true, //注意3：这个配置，方便post提交表单
                     htmlDecode: true,
-                    htmlDecode: 'style,script,iframe|on*', // 开启 HTML 标签解析，为了安全性，默认不开启
+                    htmlDecode: "style,script,iframe|on*", // 开启 HTML 标签解析，为了安全性，默认不开启
                     /**上传图片相关配置如下*/
                     imageUpload: true,
-                    imageFormats: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
-                    imageUploadURL: '/static/' //注意你后端的上传图片服务地址
-                  })
-                  $('#my-editormd-markdown-doc').val(res)
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL: "/static/", //注意你后端的上传图片服务地址
+                  });
+                  $("#my-editormd-markdown-doc").val(res);
                 })
-                .catch(err => {
-                  console.log(err)
-                })
+                .catch((err) => {
+                  console.log(err);
+                });
               // alert(r.message)
             })
-            .fail(function(jqXHR, textStatus) {
+            .fail(function (jqXHR, textStatus) {
               // Not 200:
-              console.log(jqXHR)
-              alert('Error: ' + textStatus)
-            })
+              console.log(jqXHR);
+              alert("Error: " + textStatus);
+            });
         } else {
-          return
+          return;
         }
 
         // 修改文章
-        $('#btn3').on('click', function() {
-          let title = $('#title').val()
-          let encode = testEditor.getMarkdown()
-          let desc = $('#desc').val()
-          let type = $('#type').val()
-          let columntype = $('#columntype').val()
-          let smallimg = url || $('#img').attr('src')
+        $("#btn3").on("click", function () {
+          let title = $("#title").val();
+          let encode = testEditor.getMarkdown();
+          let desc = $("#desc").val();
+          let type = $("#type").val();
+          let columntype = $("#columntype").val();
+          let smallimg = url || $("#img").attr("src");
           var para = {
-            articleid: $('#articleid').text(),
+            articleid: $("#articleid").text(),
             type: type, // 类型 0：原创 / 1： 转载
             desc: desc, // 描述信息
             smallimg: smallimg, // 缩略图
             title: title, // 标题
             columntype: columntype, // 栏目类型
-            content: encode // 這个参数 是服务端 取得那个参数
-          }
+            content: encode, // 這个参数 是服务端 取得那个参数
+          };
           $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json',
-            url: '/api/updateArticle',
-            data: JSON.stringify(para)
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: "/api/updateArticle",
+            data: JSON.stringify(para),
           })
-            .done(function(r) {
-              console.log(r)
-              alert(r.message)
+            .done(function (r) {
+              console.log(r);
+              alert(r.message);
               // window.history.go(-1)
             })
-            .fail(function(jqXHR, textStatus) {
+            .fail(function (jqXHR, textStatus) {
               // Not 200:
-              console.log(jqXHR)
-              alert('Error: ' + textStatus)
-            })
-        })
-      })
+              console.log(jqXHR);
+              alert("Error: " + textStatus);
+            });
+        });
+      });
     </script>
   </body>
 </html>
