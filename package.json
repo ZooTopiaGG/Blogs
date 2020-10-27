@@ -42,5 +42,13 @@
     "koa"
   ],
   "author": "dengpeng",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZooTopiaGG/Blogs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZooTopiaGG/Blogs/issues"
+  },
+  "homepage": "https://github.com/ZooTopiaGG/Blogs#readme"
 }
