@@ -39,8 +39,26 @@ var fn_postHtml = async (ctx, next) => {
     result: html,
   });
   // console.log(html.columntype)
-  let columntypes = ctx.request.body.columntype == 1 ? "技术" : "文章",
-    icontype = ctx.request.body.columntype == 1 ? "4" : "0";
+  let columntypes = "",
+    icontype = "";
+  switch (ctx.request.body.columntype) {
+    case 1:
+      columntypes = "技术";
+      icontype = "4";
+      break;
+    case 0:
+      columntypes = "文章";
+      icontype = "0";
+      break;
+    case 2:
+      columntypes = "刷题";
+      icontype = "5";
+      break;
+    default:
+      columntypes = "技术";
+      icontype = "4";
+      break;
+  }
   await Latest.create({
     latestid: html.id,
     author: "邓鹏",

@@ -5,6 +5,6 @@
   "bucket2": "55lover-videos",
   "port": 8088,
   "uptokenUrl": "/api/upload",
-  "domain": "http://wallpaper.55lover.com/",
-  "domain2": "http://videos.55lover.com/"
+  "domain": "https://wallpaper.55lover.com/",
+  "domain2": "https://videos.55lover.com/"
 }

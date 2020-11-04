@@ -155,12 +155,17 @@ var uploadAudio = function () {
       fileType: "audios",
       path: serverPath,
     });
-
+    console.log("result:", result);
     const imgPath = path.join("./static/web/", result.imgPath);
     // 上传到七牛
     const qiniu = await upToQiniu(imgPath, `videos/${result.imgKey}`);
     // 上存到七牛之后 删除原来的缓存图片
+    console.log("qiniu:", qiniu);
+    next();
+    ctx.response.header["access-control-allow-origin"] = "*";
+    ctx.response.header["content-type"] = "application/json; charset=utf-8";
     removeTemImage(imgPath);
+    console.log("ctx:", ctx);
     ctx.body = {
       imgUrl: `${qiniuConfig.domain2}${qiniu.key}`,
     };
