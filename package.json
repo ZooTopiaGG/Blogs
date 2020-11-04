@@ -2,10 +2,11 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=test node --use_strict server.js",
     "start": "cross-env NODE_ENV=production node --use_strict server.js",
-    "pm2": "pm2 start pm2.config.json"
+    "pm2": "pm2 start pm2.config.json",
+    "release": "node ./node_modules/standard2version/lib/release.js"
   },
   "name": "55lover-blog",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "this is a koa project",
   "main": "app.js",
   "dependencies": {
@@ -25,6 +26,7 @@
     "path": "^0.12.7",
     "qiniu": "^7.2.2",
     "request": "^2.83.0",
+    "standard-version": "^9.0.0",
     "util": "^0.10.3"
   },
   "devDependencies": {
@@ -36,7 +38,8 @@
     "node-schedule": "^1.3.2",
     "node-uuid": "^1.4.8",
     "nunjucks": "^3.0.1",
-    "sequelize": "^5.8.12"
+    "sequelize": "^5.8.12",
+    "standard2version": "^1.0.7"
   },
   "keywords": [
     "koa"
