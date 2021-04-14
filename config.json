@@ -1,10 +1,12 @@
 {
-  "accessKey": "mcya7L-djsN7KuiF2QanzuTbreUvjXmmP6dZOAge",
-  "secretKey": "DDeGtbiYmuVjnxacSiwMpQO3cluSyxnckXFs49Pn",
+  "accessKey": "S2a4fS8ChjpgdwuEac7sA4WL8rVXwC4b22dJqwkX",
+  "secretKey": "ocGNosj2vnGI0M_qXSCkhbjG2X0tKPgOpCCvHDoF",
   "bucket": "55lover-wallpaper",
   "bucket2": "55lover-videos",
   "port": 8088,
   "uptokenUrl": "/api/upload",
   "domain": "https://wallpaper.55lover.com/",
-  "domain2": "https://videos.55lover.com/"
+  "domain2": "https://videos.55lover.com/",
+  "host": "wallpaper.55lover.com",
+  "host2": "videos.55lover.com"
 }

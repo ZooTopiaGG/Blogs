@@ -202,6 +202,41 @@ var fn_defaultCover = async (ctx, next) => {
   });
 };
 
+const qiniu = require("qiniu");
+const qiniuConfig = require("../config.json");
+
+var fn_uploadToken = async (ctx) => {
+  try {
+    const accessKey = qiniuConfig.accessKey; // 你的七牛的accessKey
+    const secretKey = qiniuConfig.secretKey; // 你的七牛的secretKey
+    const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+    const bucket = qiniuConfig.bucket2;
+    const options = {
+      scope: bucket, // 你的七牛存储对象
+      fsizeLimit: 1024 * 1024 * 1024,
+      forceSaveKey: true,
+    };
+    const putPolicy = new qiniu.rs.PutPolicy(options);
+    const uploadToken = putPolicy.uploadToken(mac);
+
+    const config = new qiniu.conf.Config();
+    // 空间对应的机房
+    config.zone = qiniu.zone.Zone_z0;
+    const putExtra = new qiniu.form_up.PutExtra();
+    await ctx.rest({
+      isSuc: true,
+      message: "success",
+      result: {
+        token: uploadToken,
+        putExtra,
+        config,
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+};
+
 // 导出 模块函数
 module.exports = {
   // 获取QQ音乐列表
@@ -213,4 +248,5 @@ module.exports = {
   "POST /api/getLatestArticles": fn_getLatestArticles,
   "POST /api/statistics": fn_setStatistics,
   "GET /api/defaultCover": fn_defaultCover,
+  "GET /api/uploadToken": fn_uploadToken,
 };

@@ -10,7 +10,6 @@ const controller = require("./controller.js");
 const templating = require("./template.js");
 const rest = require("./rest.js");
 const upload = require("./upload.js");
-// console.log(upload.uploadAudio())
 
 const app = new Koa();
 const isProduction = process.env.NODE_ENV === "production";
@@ -51,7 +50,6 @@ app.use(staticFiles("/static/", __dirname + "/static"));
 
 // 上传图片
 app.use(upload.uploadImg()); // app.use(Function) 接收function
-app.use(upload.uploadAudio()); // app.use(Function) 接收function
 
 //4 post 请求 必须引用
 app.use(bodyparser());

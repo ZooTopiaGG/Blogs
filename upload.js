@@ -99,6 +99,7 @@ function uploadFile(ctx, options) {
       encoding,
       mimetype
     ) {
+      console.log("file", file);
       const fileName = Rename(filename);
       const saveTo = path.join(path.join(filePath, fileName));
       file.pipe(fs.createWriteStream(saveTo));

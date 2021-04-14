@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "cross-env NODE_ENV=test node --use_strict server.js",
+    "dev": "cross-env NODE_ENV=test node --inspect --use_strict server.js",
     "start": "cross-env NODE_ENV=production node --use_strict server.js",
     "pm2": "pm2 start pm2.config.json",
     "release": "node ./node_modules/standard2version/lib/release.js"
