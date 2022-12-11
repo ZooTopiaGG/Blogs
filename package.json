@@ -11,7 +11,7 @@
   "main": "app.js",
   "dependencies": {
     "busboy": "^0.2.14",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "iconv-lite": "^0.4.19",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
